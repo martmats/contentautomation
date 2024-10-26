@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
 import openai
-import matplotlib.pyplot as plt
-import seaborn as sns
-import datetime
 
-# Configuración de la API de OpenAI
+# Título y configuración de la API de OpenAI
 st.title("Herramienta de Análisis de Sentimiento con OpenAI")
 openai_api_key = st.text_input("Introduce tu API Key de OpenAI", type="password")
 
@@ -22,14 +19,6 @@ if openai_api_key:
 
         # Selección de columnas
         text_column = st.selectbox("Selecciona la columna de texto para el análisis de sentimiento", df.columns)
-        date_column = st.selectbox("Selecciona la columna de fecha (opcional)", df.columns.insert(0, "Ninguna"))
-
-        # Filtros de fecha
-        if date_column != "Ninguna":
-            df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
-            start_date = st.date_input("Fecha de inicio", min_value=df[date_column].min(), max_value=df[date_column].max())
-            end_date = st.date_input("Fecha de fin", min_value=df[date_column].min(), max_value=df[date_column].max())
-            df = df[(df[date_column] >= pd.Timestamp(start_date)) & (df[date_column] <= pd.Timestamp(end_date))]
 
         # Función para analizar el sentimiento
         def analyze_sentiment(text):
@@ -49,18 +38,6 @@ if openai_api_key:
         st.write("Análisis completado:")
         st.dataframe(df[[text_column, "Sentimiento"]])
 
-        # Visualización de resultados
-        st.subheader("Visualización de Resultados de Sentimiento")
-        
-        # Conteo de sentimientos
-        sentiment_counts = df["Sentimiento"].value_counts()
-        plt.figure(figsize=(10, 5))
-        sns.barplot(x=sentiment_counts.index, y=sentiment_counts.values)
-        plt.title("Distribución de Sentimientos")
-        plt.xlabel("Sentimiento")
-        plt.ylabel("Frecuencia")
-        st.pyplot(plt)
-
         # Exportar resultados
         st.subheader("Descargar Resultados")
         csv = df.to_csv(index=False).encode('utf-8')
@@ -72,4 +49,3 @@ if openai_api_key:
         )
 else:
     st.warning("Introduce tu API Key para continuar.")
-
