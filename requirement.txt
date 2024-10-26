@@ -1,6 +1,0 @@
-streamlit
-pandas
-openai
-matplotlib
-seaborn
-wordcloud
