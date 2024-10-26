@@ -6,7 +6,7 @@ import seaborn as sns
 import datetime
 
 # Configuración de la API de OpenAI
-st.title("Herramienta de Análisis de Sentimiento Avanzado")
+st.title("Herramienta de Análisis de Sentimiento con OpenAI")
 openai_api_key = st.text_input("Introduce tu API Key de OpenAI", type="password")
 
 if openai_api_key:
@@ -61,16 +61,6 @@ if openai_api_key:
         plt.ylabel("Frecuencia")
         st.pyplot(plt)
 
-        # Nube de palabras
-        st.subheader("Nube de Palabras de Sentimientos")
-        from wordcloud import WordCloud
-        positive_words = ' '.join(df[df["Sentimiento"] == "Positivo"][text_column])
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(positive_words)
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis('off')
-        st.pyplot(plt)
-
         # Exportar resultados
         st.subheader("Descargar Resultados")
         csv = df.to_csv(index=False).encode('utf-8')
@@ -82,3 +72,4 @@ if openai_api_key:
         )
 else:
     st.warning("Introduce tu API Key para continuar.")
+
